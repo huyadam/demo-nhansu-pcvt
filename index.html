@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCVT — Đánh giá Điều chuyển Nhân sự</title>
+    <meta name="description" content="Công cụ đánh giá phù hợp điều chuyển CBCNV giữa các Phòng/Đội — Công ty Điện lực Vũng Tàu">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-group">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <h1 class="logo-title">Đánh giá Điều chuyển Nhân sự</h1>
+                    <p class="logo-subtitle">Công ty Điện lực Vũng Tàu — PCVT</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" id="btnSettings" title="Cài đặt trọng số">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Cài đặt
+                </button>
+                <button class="btn btn-ghost" id="btnExport" title="Xuất kết quả" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Xuất Excel
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Filter Panel -->
+        <section class="filter-panel glass-card">
+            <h2 class="section-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Thiết lập Yêu cầu Điều chuyển
+            </h2>
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <label>Đơn vị nguồn</label>
+                    <div class="multi-select" id="sourceMultiSelect">
+                        <button class="multi-select-btn" id="sourceBtn" type="button">
+                            <span id="sourceBtnText">— Chọn đơn vị nguồn —</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="multi-select-dropdown" id="sourceDropdown">
+                            <label class="ms-option ms-all">
+                                <input type="checkbox" id="sourceAll"> <strong>Chọn tất cả</strong>
+                            </label>
+                            <div id="sourceOptions"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <label for="selectTarget">Đơn vị đích</label>
+                    <select id="selectTarget" class="select">
+                        <option value="">— Chọn đơn vị đích —</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="selectTargetLocation">Khu vực đích (Cơ sở)</label>
+                    <select id="selectTargetLocation" class="select">
+                        <option value="">— Tự động —</option>
+                        <option value="Cơ sở 1 (Vũng Tàu 1)">Cơ sở 1 — Vũng Tàu 1</option>
+                        <option value="Cơ sở 2 (Vũng Tàu 2)">Cơ sở 2 — Vũng Tàu 2</option>
+                        <option value="Cơ sở 3 (Bà Rịa)">Cơ sở 3 — Bà Rịa</option>
+                        <option value="Cơ sở 4 (Phú Mỹ)">Cơ sở 4 — Phú Mỹ</option>
+                        <option value="Cơ sở 5 (Côn Đảo)">Cơ sở 5 — Côn Đảo</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="inputCount">Số người cần</label>
+                    <input type="number" id="inputCount" class="input" value="3" min="1" max="50">
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-primary" id="btnEvaluate">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    Đánh giá
+                </button>
+                <button class="btn btn-secondary" id="btnReset">Đặt lại</button>
+                <div class="filter-stats" id="filterStats"></div>
+            </div>
+        </section>
+
+        <!-- Criteria Reference -->
+        <section class="criteria-panel glass-card">
+            <button class="criteria-toggle" id="criteriaToggle">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    Tiêu chí Chấm điểm — Phổ điểm Tham khảo
+                </h2>
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="criteria-body" id="criteriaBody">
+                <div class="criteria-body-inner">
+
+                    <p class="criteria-subtitle">🎯 1. Kinh nghiệm liên quan (mặc định: 30 điểm)</p>
+                    <table class="criteria-table">
+                        <thead><tr><th>Mức</th><th>% tối đa</th><th>Điều kiện</th></tr></thead>
+                        <tbody>
+                            <tr><td class="pct-100">100%</td><td class="pct-100">30</td><td>Đã từng làm tại đơn vị đích hoặc đơn vị tương đương</td></tr>
+                            <tr><td class="pct-85">85%</td><td class="pct-85">26</td><td>Khớp ≥ 50% keyword (nhiều kinh nghiệm liên quan)</td></tr>
+                            <tr><td class="pct-60">60%</td><td class="pct-60">18</td><td>Khớp 25–49% keyword (một số kinh nghiệm)</td></tr>
+                            <tr><td class="pct-33">33%</td><td class="pct-33">10</td><td>Khớp < 25% keyword (ít kinh nghiệm)</td></tr>
+                            <tr><td class="pct-0">0%</td><td class="pct-0">0</td><td>Không khớp keyword nào</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p class="criteria-subtitle">🎓 2. Chuyên ngành đào tạo (mặc định: 25 điểm)</p>
+                    <table class="criteria-table">
+                        <thead><tr><th>Mức</th><th>% tối đa</th><th>Điều kiện</th></tr></thead>
+                        <tbody>
+                            <tr><td class="pct-100">100%</td><td class="pct-100">25</td><td>Ngành ưu tiên cao (VD: Điện → Đội QLHTĐĐ)</td></tr>
+                            <tr><td class="pct-60">60%</td><td class="pct-60">15</td><td>Ngành liên quan (VD: Tự động hóa → Phòng KTAT)</td></tr>
+                            <tr><td class="pct-33">30%</td><td class="pct-33">8</td><td>Ngành kỹ thuật chung (có chữ "điện", "kỹ thuật")</td></tr>
+                            <tr><td class="pct-0">0%</td><td class="pct-0">0</td><td>Ngành không liên quan hoặc thiếu dữ liệu</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p class="criteria-subtitle">📍 3. Khu vực lưu trú (mặc định: 20 điểm)</p>
+                    <table class="criteria-table">
+                        <thead><tr><th>Khoảng cách</th><th>% tối đa</th><th>Ví dụ</th></tr></thead>
+                        <tbody>
+                            <tr><td class="pct-100">0 — Cùng khu vực</td><td class="pct-100">20</td><td>Ở Vũng Tàu → CS1 Vũng Tàu</td></tr>
+                            <tr><td class="pct-85">1 — Rất gần</td><td class="pct-85">17</td><td>Ở Vũng Tàu → CS2 Vũng Tàu</td></tr>
+                            <tr><td class="pct-60">2 — Gần</td><td class="pct-60">12</td><td>Ở Vũng Tàu → CS3 Bà Rịa</td></tr>
+                            <tr><td class="pct-33">3 — Xa</td><td class="pct-33">6</td><td>Ở Vũng Tàu → CS4 Phú Mỹ</td></tr>
+                            <tr><td class="pct-0">5 — Biệt lập</td><td class="pct-0">0</td><td>Bất kỳ ↔ CS5 Côn Đảo</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p class="criteria-subtitle">📚 4. Trình độ đào tạo (mặc định: 10 điểm)</p>
+                    <table class="criteria-table">
+                        <thead><tr><th>Trình độ</th><th>Phòng ban</th><th>Đội kỹ thuật</th></tr></thead>
+                        <tbody>
+                            <tr><td>Đại học trở lên</td><td class="pct-100">100% (10đ)</td><td class="pct-100">100% (10đ)</td></tr>
+                            <tr><td>Cao đẳng</td><td class="pct-60">50% (5đ)</td><td class="pct-85">70% (7đ)</td></tr>
+                            <tr><td>Trung cấp</td><td class="pct-0">0%</td><td class="pct-85">70% (7đ)</td></tr>
+                            <tr><td>Phổ thông</td><td class="pct-0">0%</td><td class="pct-33">30% (3đ)</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p class="criteria-subtitle">⏱️ 5. Thâm niên đơn vị hiện tại (mặc định: 10 điểm)</p>
+                    <table class="criteria-table">
+                        <thead><tr><th>Thời gian</th><th>% tối đa</th><th>Lý giải</th></tr></thead>
+                        <tbody>
+                            <tr><td class="pct-100">≥ 5 năm</td><td class="pct-100">10</td><td>Gắn bó lâu, đã đủ KN để chuyển</td></tr>
+                            <tr><td class="pct-85">3–5 năm</td><td class="pct-85">7</td><td>Ổn định</td></tr>
+                            <tr><td class="pct-60">1–3 năm</td><td class="pct-60">4</td><td>Chưa lâu</td></tr>
+                            <tr><td class="pct-0">< 1 năm</td><td class="pct-0">0</td><td>Mới chuyển đến, chưa nên chuyển tiếp</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p class="criteria-subtitle">🔄 6. Số lần điều chuyển (mặc định: 5 điểm)</p>
+                    <table class="criteria-table">
+                        <thead><tr><th>Số lần</th><th>% tối đa</th><th>Lý giải</th></tr></thead>
+                        <tbody>
+                            <tr><td class="pct-100">1–3 lần</td><td class="pct-100">5</td><td>Ít thay đổi → ổn định</td></tr>
+                            <tr><td class="pct-60">4–6 lần</td><td class="pct-60">3</td><td>Vừa phải</td></tr>
+                            <tr><td class="pct-0">≥ 7 lần</td><td class="pct-0">0</td><td>Đã chuyển quá nhiều</td></tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section class="results-section" id="resultsSection" style="display:none;">
+            <div class="results-header">
+                <h2 class="section-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Kết quả Xếp hạng
+                </h2>
+                <div class="results-meta" id="resultsMeta"></div>
+            </div>
+            <div class="results-table-wrap">
+                <table class="results-table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th class="col-rank">Hạng</th>
+                            <th class="col-name">Họ và tên</th>
+                            <th class="col-role">Chức vụ</th>
+                            <th class="col-unit">Tổ nhóm</th>
+                            <th class="col-loc">Khu vực</th>
+                            <th class="col-score">Tổng<br>điểm</th>
+                            <th class="col-detail">KN</th>
+                            <th class="col-detail">Ngành</th>
+                            <th class="col-detail">Khu vực</th>
+                            <th class="col-detail">Trình độ</th>
+                            <th class="col-detail">Thâm niên</th>
+                            <th class="col-detail">Đ.chuyển</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h3>Cài đặt Trọng số Chấm điểm</h3>
+                <button class="btn-close" id="btnCloseSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Điều chỉnh trọng số từng tiêu chí. Tổng sẽ tự động cập nhật.</p>
+                <div class="weight-grid">
+                    <div class="weight-item">
+                        <label>Kinh nghiệm liên quan</label>
+                        <div class="weight-control">
+                            <input type="range" class="slider" id="wKinhNghiem" min="0" max="50" value="30">
+                            <span class="weight-value" id="wKinhNghiemVal">30</span>
+                        </div>
+                        <small>Quét lịch sử công tác tìm keyword phù hợp đơn vị đích</small>
+                    </div>
+                    <div class="weight-item">
+                        <label>Chuyên ngành đào tạo</label>
+                        <div class="weight-control">
+                            <input type="range" class="slider" id="wNganhNghe" min="0" max="50" value="25">
+                            <span class="weight-value" id="wNganhNgheVal">25</span>
+                        </div>
+                        <small>Ngành nghề đào tạo phù hợp yêu cầu đơn vị đích</small>
+                    </div>
+                    <div class="weight-item">
+                        <label>Khu vực lưu trú</label>
+                        <div class="weight-control">
+                            <input type="range" class="slider" id="wKhuVuc" min="0" max="50" value="20">
+                            <span class="weight-value" id="wKhuVucVal">20</span>
+                        </div>
+                        <small>Khoảng cách từ nơi ở đến cơ sở đơn vị đích</small>
+                    </div>
+                    <div class="weight-item">
+                        <label>Trình độ đào tạo</label>
+                        <div class="weight-control">
+                            <input type="range" class="slider" id="wTrinhDo" min="0" max="50" value="10">
+                            <span class="weight-value" id="wTrinhDoVal">10</span>
+                        </div>
+                        <small>Tiến sĩ > Thạc sĩ > Đại học > Cao đẳng > Trung cấp</small>
+                    </div>
+                    <div class="weight-item">
+                        <label>Thâm niên đơn vị hiện tại</label>
+                        <div class="weight-control">
+                            <input type="range" class="slider" id="wThamNien" min="0" max="50" value="10">
+                            <span class="weight-value" id="wThamNienVal">10</span>
+                        </div>
+                        <small>Thời gian tại đơn vị hiện tại (ưu tiên đã gắn bó lâu)</small>
+                    </div>
+                    <div class="weight-item">
+                        <label>Số lần điều chuyển</label>
+                        <div class="weight-control">
+                            <input type="range" class="slider" id="wDieuChuyen" min="0" max="50" value="5">
+                            <span class="weight-value" id="wDieuChuyenVal">5</span>
+                        </div>
+                        <small>Ít điều chuyển trước đó → ưu tiên hơn</small>
+                    </div>
+                </div>
+                <div class="weight-total">
+                    Tổng trọng số: <strong id="weightTotal">100</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnResetWeights">Đặt mặc định</button>
+                <button class="btn btn-primary" id="btnApplyWeights">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Person Detail Dialog (native) -->
+    <dialog id="personDialog" class="person-dialog">
+        <div class="dialog-inner">
+            <div class="dialog-header">
+                <h3 id="personName">—</h3>
+                <button class="btn-close" id="btnClosePerson">&times;</button>
+            </div>
+            <div class="dialog-body" id="personBody"></div>
+        </div>
+    </dialog>
+
+    <!-- Distance Matrix Info -->
+    <div class="distance-info glass-card" id="distanceInfo" style="display:none;">
+        <h4>📍 Ma trận Khoảng cách Cơ sở</h4>
+        <table class="distance-table">
+            <thead>
+                <tr>
+                    <th></th><th>CS1<br>VT1</th><th>CS2<br>VT2</th><th>CS3<br>BR</th><th>CS4<br>PM</th><th>CS5<br>CĐ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>CS1</strong></td><td class="d0">0</td><td class="d1">1</td><td class="d2">2</td><td class="d3">3</td><td class="d5">5</td></tr>
+                <tr><td><strong>CS2</strong></td><td class="d1">1</td><td class="d0">0</td><td class="d2">2</td><td class="d3">3</td><td class="d5">5</td></tr>
+                <tr><td><strong>CS3</strong></td><td class="d2">2</td><td class="d2">2</td><td class="d0">0</td><td class="d2">2</td><td class="d5">5</td></tr>
+                <tr><td><strong>CS4</strong></td><td class="d3">3</td><td class="d3">3</td><td class="d2">2</td><td class="d0">0</td><td class="d5">5</td></tr>
+                <tr><td><strong>CS5</strong></td><td class="d5">5</td><td class="d5">5</td><td class="d5">5</td><td class="d5">5</td><td class="d0">0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer">
+        <p>Công ty Điện lực Vũng Tàu — PCVT &bull; Phổ Nhân sự &bull; ABCD Group</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

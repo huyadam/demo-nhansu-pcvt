@@ -1,0 +1,16 @@
+# Data files (sensitive)
+cbcnv_data.json
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
