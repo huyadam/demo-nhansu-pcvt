@@ -126,21 +126,118 @@ let weights = {
 };
 
 // ============================================
-// 3. DATA LOADING
+// 3. DATA LOADING (Google Sheets → CSV → JSON)
 // ============================================
+
+const SHEET_ID = '1yq0gdP808kg0Pw6rcVcxB_LyEUccm1Q_itFqwnQrmXc';
+const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=0`;
+
+/** Parse CSV text supporting quoted fields with embedded newlines */
+function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuote = false;
+
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+
+        if (inQuote) {
+            if (ch === '"' && next === '"') {
+                field += '"';
+                i++;
+            } else if (ch === '"') {
+                inQuote = false;
+            } else {
+                field += ch;
+            }
+        } else {
+            if (ch === '"') {
+                inQuote = true;
+            } else if (ch === ',') {
+                row.push(field.trim());
+                field = '';
+            } else if (ch === '\r' && next === '\n') {
+                row.push(field.trim());
+                rows.push(row);
+                row = [];
+                field = '';
+                i++;
+            } else if (ch === '\n') {
+                row.push(field.trim());
+                rows.push(row);
+                row = [];
+                field = '';
+            } else {
+                field += ch;
+            }
+        }
+    }
+    if (field || row.length > 0) {
+        row.push(field.trim());
+        rows.push(row);
+    }
+    return rows;
+}
+
+/** Map CSV row to app data object */
+function csvRowToObj(headers, row) {
+    const get = (name) => {
+        const idx = headers.indexOf(name);
+        return idx >= 0 ? (row[idx] || '') : '';
+    };
+    return {
+        msnv: get('MSNV'),
+        hoTen: get('Họ và tên'),
+        ngaySinh: get('Ngày sinh'),
+        dienThoai: get('Điện thoại'),
+        email: get('Email'),
+        gioiTinh: get('Giới tính'),
+        phongDoi: normalizeName(get('Phòng Đội')),
+        toNhom: get('Phòng ban/Tổ nhóm'),
+        maChucVu: parseInt(get('Mã chức vụ')) || 8,
+        chucVu: get('Chức vụ'),
+        trinhDo: get('Trình độ đào tạo'),
+        nganhNghe: get('Ngành nghề đào tạo'),
+        coSo: get('Cơ sở'),
+        khuVuc: get('Địa chỉ (khu vực)'),
+        quaTrinhCongTac: get('Quá trình công tác'),
+        linkAnh: get('Link ảnh')
+    };
+}
 
 async function loadData() {
     try {
-        const resp = await fetch('cbcnv_data.json');
-        const json = await resp.json();
-        // Normalize tên Phòng/Đội
-        allData = json.data.map(d => ({ ...d, phongDoi: normalizeName(d.phongDoi) }));
-        console.log(`Loaded ${allData.length} CBCNV (exported: ${json.exportDate})`);
+        // Ưu tiên fetch từ Google Sheets
+        console.log('Fetching from Google Sheets...');
+        const resp = await fetch(SHEET_CSV_URL);
+        const csvText = await resp.text();
+        const rows = parseCSV(csvText);
+
+        if (rows.length < 2) throw new Error('CSV rỗng');
+
+        const headers = rows[0];
+        allData = rows.slice(1)
+            .filter(r => r.length >= 5 && r[1]) // skip empty rows
+            .map(r => csvRowToObj(headers, r));
+
+        console.log(`Loaded ${allData.length} CBCNV from Google Sheets`);
         populateDropdowns();
-        document.getElementById('filterStats').textContent = `📊 ${allData.length} CBCNV | Cập nhật: ${json.exportDate}`;
+        document.getElementById('filterStats').textContent = `📊 ${allData.length} CBCNV | Nguồn: Google Sheets (live)`;
     } catch (err) {
-        console.error('Lỗi load data:', err);
-        document.getElementById('filterStats').textContent = '❌ Không tải được dữ liệu. Chạy export_data.py trước!';
+        console.warn('Google Sheets failed, trying local JSON...', err);
+        try {
+            const resp = await fetch('cbcnv_data.json');
+            const json = await resp.json();
+            allData = json.data.map(d => ({ ...d, phongDoi: normalizeName(d.phongDoi) }));
+            console.log(`Loaded ${allData.length} CBCNV from local JSON`);
+            populateDropdowns();
+            document.getElementById('filterStats').textContent = `📊 ${allData.length} CBCNV | Nguồn: Local (${json.exportDate})`;
+        } catch (err2) {
+            console.error('Lỗi load data:', err2);
+            document.getElementById('filterStats').textContent = '❌ Không tải được dữ liệu!';
+        }
     }
 }
 
